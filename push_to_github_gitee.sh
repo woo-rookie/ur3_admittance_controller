@@ -45,10 +45,10 @@ git remote add github https://github.com/woo-rookie/ur3_admittance_controller.gi
 git commit -m "$(date)"
 # git commit -m "first commit"
 
-git pull gitee master
-git pull github master
+# git pull gitee master
+# git pull github master
 
-git push gitee master -f
-git push github master -f
+git push gitee main
+git push github main
 
 
