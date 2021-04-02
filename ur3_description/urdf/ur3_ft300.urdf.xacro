@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="ur3" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="PI" value="3.1415926535897931" />
+
+  <xacro:property name="deck_height" value="0.280" />
+
+  <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
+  <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
+  <material name="yellow"><color rgba="0.8 0.8 0.0 1.0" /></material>
+  <material name="black"><color rgba="0.15 0.15 0.15 1.0" /></material>
+
+
+  <xacro:include filename="$(find ur_description)/urdf/ur3.urdf.xacro" />
+
+  <link name="base_link"></link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 ${deck_height}" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="mid_mount" />
+  </joint>
+
+
+  <link name="mid_mount" />
+
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- Bring in simulation data for Gazebo. -->
+  <xacro:include filename="$(find ur3_description)/urdf/ur3.gazebo" />
+
+  <!-- Optional standard accessories, including their simulation data. The rendering
+       of these into the final description is controlled by optenv variables, which
+       default each one to off.-->
+  <xacro:include filename="$(find ur3_description)/urdf/accessories.urdf.xacro" />
+
+</robot>

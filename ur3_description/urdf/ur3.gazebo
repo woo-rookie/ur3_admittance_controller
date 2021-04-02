@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot>
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+  <!-- All static links get collapsed down to base_link in Gazebo, so that's
+       the one to apply the colour to (in Gazebo 5+). -->
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+    <gravity>true</gravity>
+  </gazebo>
+</robot>

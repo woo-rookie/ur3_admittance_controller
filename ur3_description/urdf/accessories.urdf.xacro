@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find ur_description)/urdf/ur3.urdf.xacro" />
+
+<!-- Spawn arm -->
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+  <xacro:arg name="kinematics_config" default="$(find ur_description)/config/ur3_default.yaml"/>
+  <xacro:ur3_robot prefix="ur3_arm_" joint_limited="true"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+    kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
+
+  <!-- Join arm -->
+  <joint name="ur3_arm_base" type="fixed">
+	<parent link="mid_mount" />
+	<child link="ur3_arm_base_link" />
+	<origin xyz="0 0.0 0.0" rpy="0.0 0.0 -1.5708" />
+  </joint>
+
+  <!-- Sensor Mount and other custom parts -->
+  <link name="FT300_link">
+		<visual>
+			<geometry>
+				<cylinder length="0.04" radius="0.035"/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+
+		<collision>
+			<geometry>
+				<cylinder length="0.04" radius="0.035"/>
+			</geometry>
+		</collision>
+   </link>
+
+  <joint name="FT300_joint" type="fixed">
+	  <origin xyz="0.02 0 0" rpy="0 1.57 0" />
+	  <parent link="ur3_arm_ee_link" />
+	  <child link="FT300_link" />
+  </joint>
+
+
+</robot>
