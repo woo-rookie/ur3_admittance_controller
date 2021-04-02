@@ -48,7 +48,7 @@ git commit -m "$(date)"
 git pull gitee master
 git pull github master
 
-git push gitee master
-git push github master
+git push gitee master -f
+git push github master -f
 
 
