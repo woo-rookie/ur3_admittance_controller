@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<robot name="ur3" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="PI" value="3.1415926535897931" />
+
+  <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
+  <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
+  <material name="yellow"><color rgba="0.8 0.8 0.0 1.0" /></material>
+  <material name="black"><color rgba="0.15 0.15 0.15 1.0" /></material>
+ 
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+  <!-- common stuff -->
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+  <!-- ur3 -->
+  <xacro:include filename="$(find ur_description)/urdf/ur3.urdf.xacro" />
+  <!-- arm -->
+  <xacro:arg name="kinematics_config" default="$(find ur_description)/config/ur3_default.yaml"/>
+  <xacro:ur3_robot prefix="ur3_arm_" joint_limited="true"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+    kinematics_file="${load_yaml('$(arg kinematics_config)')}"
+  />
+
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+    <!-- ROS base_link to UR 'Base' Coordinates transform -->
+    <link name="base_link"/>
+    <joint name="base_link_joint" type="fixed">
+      <!-- NOTE: this rotation is only needed as long as ur3_arm_base_link itself is
+                 not corrected wrt the real robot (ie: rotated over 180
+                 degrees)
+      -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="ur3_arm_base_link"/>
+    </joint>
+
+  <!-- Sensor Mount and other custom parts -->
+  <link name="FT300_link">
+		<visual>
+			<geometry>
+				<cylinder length="0.04" radius="0.035"/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+
+		<collision>
+			<geometry>
+				<cylinder length="0.04" radius="0.035"/>
+			</geometry>
+		</collision>
+   </link>
+
+  <joint name="FT300_joint" type="fixed">
+	  <origin xyz="0 0 0" rpy="0 1.57 0" />
+	  <parent link="ur3_arm_ee_link" />
+	  <child link="FT300_link" />
+  </joint>
+
+  <!-- Bring in simulation data for Gazebo. -->
+  <xacro:include filename="$(find ur3_description)/urdf/ur3.gazebo" />
+
+</robot>

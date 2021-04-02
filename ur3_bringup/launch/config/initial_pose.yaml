@@ -1,0 +1,13 @@
+initial_pose:
+  joint_names: ["ur3_arm_elbow_joint",
+                "ur3_arm_shoulder_lift_joint",
+                "ur3_arm_shoulder_pan_joint",
+                "ur3_arm_wrist_1_joint",
+                "ur3_arm_wrist_2_joint",
+                "ur3_arm_wrist_3_joint"]
+  joint_values: [2.137181473386596,
+                 -1.4998039803657388,
+                 1.549433454173772,
+                 -2.0415906290824704,
+                 1.652389958375986,
+                 0.0786922321771]

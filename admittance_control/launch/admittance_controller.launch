@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<launch>
+  <!--
+      Launch file for the admittance controller
+  -->
+
+  <arg name="TOPIC_ARM_STATE" default="/ur3_cartesian_velocity_controller_sim/ee_state"/>
+  <arg name="TOPIC_ARM_COMMAND" default="/ur3_cartesian_velocity_controller_sim/command_cart_vel"/>
+
+  <arg name="TOPIC_EXTERNAL_WRENCH"  default="/admittance_control/wrench" />
+  <arg name="WRENCH_FILTER_FACTOR" default="1.0" />
+  <arg name="FORCE_DEAD_ZONE_THRES" default="0.0" />
+  <arg name="TORQUE_DEAD_ZONE_THRES" default="0.0" />
+
+  <!-- Other control and state topics -->
+  <arg name="TOPIC_ARM_TWIST_WORLD" default="/admittance_control/ee_twist_world"/>
+  <arg name="TOPIC_ARM_POSE_WORLD" default="/admittance_control/ee_pose_world"/>
+  <arg name="TOPIC_CONTROL_WRENCH" default="/admittance_control/wrench_control" />
+  <arg name="TOPIC_EQUILIBRIUM_DESIRED" default="/admittance_control/equilibrium_desired" />
+  <arg name="TOPIC_EQUILIBRIUM_REAL" default="/admittance_control/equilibrium_real" />
+  <arg name="TOPIC_DS_VELOCITY" default="/ds_desired_velocity" />
+  <arg name="TOPIC_EXTERNAL_WRENCH_ARM_FRAME" default="/admittance_control/transformed/external_wrench" />
+  <arg name="TOPIC_CONTROL_WRENCH_ARM_FRAME"  default="/admittance_control/transformed/control_wrench"  />
+  <arg name="TOPIC_AMITTANCE_RATIO"  default="/admittance_control/admittance_ratio"  />
+
+  <arg name="ADMITTANCE_PARAMS_FILE" default="$(find admittance_control)/config/admittance_params.yaml" />
+
+  <group ns="admittance_control">
+    <!-- Converting args into params -->
+    <param name="topic_arm_state"                  value="$(arg TOPIC_ARM_STATE)"                />
+    <param name="topic_arm_command"                value="$(arg TOPIC_ARM_COMMAND)"              />
+    <param name="topic_external_wrench"            value="$(arg TOPIC_EXTERNAL_WRENCH)"          />
+    <param name="topic_control_wrench"             value="$(arg TOPIC_CONTROL_WRENCH)"           />
+    <param name="topic_equilibrium_desired"        value="$(arg TOPIC_EQUILIBRIUM_DESIRED)"      />
+    <param name="topic_equilibrium_real"           value="$(arg TOPIC_EQUILIBRIUM_REAL)"         />
+    <param name="topic_ds_velocity"                value="$(arg TOPIC_DS_VELOCITY)"              />
+    <param name="topic_external_wrench_arm_frame"  value="$(arg TOPIC_EXTERNAL_WRENCH_ARM_FRAME)"/>
+    <param name="topic_control_external_arm_frame" value="$(arg TOPIC_CONTROL_WRENCH_ARM_FRAME)" />
+    <param name="topic_admittance_ratio"           value="$(arg TOPIC_AMITTANCE_RATIO)"          />
+    <param name="topic_arm_pose_world"             value="$(arg TOPIC_ARM_POSE_WORLD)"           />
+    <param name="topic_arm_twist_world"            value="$(arg TOPIC_ARM_TWIST_WORLD)"          />
+    <param name="wrench_filter_factor"             value="$(arg WRENCH_FILTER_FACTOR)"           />
+    <param name="force_dead_zone_thres"            value="$(arg FORCE_DEAD_ZONE_THRES)"          />
+    <param name="torque_dead_zone_thres"           value="$(arg TORQUE_DEAD_ZONE_THRES)"         />
+
+    <rosparam file="$(arg ADMITTANCE_PARAMS_FILE)" command="load"/>
+
+    <node name="admittance_controller" pkg="admittance_control" 
+    type="admittance_controller_node" output="screen"/>
+
+</group>
+
+</launch>

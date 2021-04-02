@@ -1,0 +1,37 @@
+# Admittance parameters for one mass damper systems
+# the arm with params (mass_arm, damping_arm), connected by a
+# spring-damper with parameters (damping_coupling, stiffness_coupling,
+# equilibrium_point_spring)
+
+mass_arm: [2,0,0,0,0,0,
+           0,2,0,0,0,0,
+           0,0,2,0,0,0,
+           0,0,0,2,0,0,
+           0,0,0,0,2,0,
+           0,0,0,0,0,2]
+damping_coupling: [0,0,0,0,0,0,
+                   0,0,0,0,0,0,
+                   0,0,0,0,0,0,
+                   0,0,0,0,0,0,
+                   0,0,0,0,0,0,
+                   0,0,0,0,0,0]
+damping_arm: [12,0,0,0,0,0,
+              0,12,0,0,0,0,
+              0,0,12,0,0,0,
+              0,0,0,10,0,0,
+              0,0,0,0,10,0,
+              0,0,0,0,0,10]
+stiffness_coupling: [10,0,0,0,0,0,
+                     0,20,0,0,0,0,
+                     0,0,10,0,0,0,
+                     0,0,0,10,0,0,
+                     0,0,0,0,10,0,
+                     0,0,0,0,0,10]
+# [position (x, y, z)  orientation (x, y, z, w)]
+equilibrium_point_spring: [0.1,0.4,0.5,-0.593599, -0.566706, -0.369419, 0.435908]
+
+workspace_limits: [-0.50, 0.50, -0.5, 0.5, 0.1, 0.483]
+
+arm_max_vel: 0.3
+arm_max_acc: 2
+
