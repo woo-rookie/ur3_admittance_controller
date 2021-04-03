@@ -100,7 +100,7 @@ find_package(catkin REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES cpr_bringup
+#  LIBRARIES ur3_bringup
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -115,7 +115,7 @@ catkin_package(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/cpr_bringup.cpp
+#   src/${PROJECT_NAME}/ur3_bringup.cpp
 # )
 
 ## Add cmake target dependencies of the library

@@ -2,7 +2,7 @@
 <package>
   <name>ur3_description</name>
   <version>0.1.6</version>
-  <description>URDF robot description for Ridgeback</description>
+  <description>URDF robot description for ur3</description>
 
   <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
 

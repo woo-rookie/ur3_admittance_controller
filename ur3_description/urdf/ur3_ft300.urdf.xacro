@@ -2,7 +2,7 @@
 <robot name="ur3" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="PI" value="3.1415926535897931" />
 
-  <xacro:property name="deck_height" value="0.280" />
+  <xacro:property name="connector_height" value="0.020" />
 
   <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
   <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
@@ -15,7 +15,7 @@
   <link name="base_link"></link>
 
   <joint name="base_link_joint" type="fixed">
-    <origin xyz="0 0 ${deck_height}" rpy="0 0 0" />
+    <origin xyz="0 0 ${connector_height}" rpy="0 0 0" />
     <parent link="base_link"/>
     <child link="mid_mount" />
   </joint>

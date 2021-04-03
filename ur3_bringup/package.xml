@@ -2,7 +2,7 @@
 <package>
   <name>ur3_bringup</name>
   <version>0.0.0</version>
-  <description>The cpr_bringup package</description>
+  <description>The ur3_bringup package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
