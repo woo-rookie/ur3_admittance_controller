@@ -74,7 +74,11 @@ Here is a short list of important frames and their usage.
 ## Adamittance dynamics
 The following figure shows the controller architecture for the admittance control on the robot.
 
+<<<<<<< HEAD
 ![alt text](fig_admittance_controler_schematic.png "Control architecture")
+=======
+![alt text](fig_controler_schematics.png "Control architecture")
+>>>>>>> 4231e8dbcb4c404a137a87df67370cead8b8b2fe
 
 The two equations in the center describe the admittance dynamics which compute the desired accelaration for the arm. These accelerations are integrated in time to acheive the desired velocities for the robot. The low-level velocity controller fullfills these velocities.
 

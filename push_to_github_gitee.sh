@@ -52,6 +52,6 @@ git pull github main
 # git checkout main 
 
 # git push gitee main
-# git push github main
+git push github main
 
 
