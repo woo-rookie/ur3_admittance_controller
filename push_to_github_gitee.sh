@@ -46,12 +46,12 @@ git commit -m "$(date)"
 # git commit -m "first commit"
 
 # git pull gitee master
-# git pull github master
+git pull github master
 
 # git branch main
 # git checkout main 
 
-git push gitee main
-git push github main
+# git push gitee main
+# git push github main
 
 
