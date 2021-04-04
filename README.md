@@ -76,7 +76,7 @@ The following figure shows the controller architecture for the admittance contro
 
 ![alt text](fig_control_schematics.png "Control architecture")
 
-The two equations in the center describe the admittance dynamics which compute the desired accelaration for the arm and the platform. These accelerations are integrated in time to acheive the desired velocities for the robot. The low-level velocity controller fullfills these velocities. In the case of platform, the computed velocities can be modified accroding to obstacle avoidance node.
+The two equations in the center describe the admittance dynamics which compute the desired accelaration for the arm. These accelerations are integrated in time to acheive the desired velocities for the robot. The low-level velocity controller fullfills these velocities.
 
 
 

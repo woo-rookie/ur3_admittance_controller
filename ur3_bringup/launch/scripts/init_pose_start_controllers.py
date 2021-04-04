@@ -27,7 +27,7 @@ def unpause_gazebo():
     subprocess.check_call("rosservice call /gazebo/unpause_physics", shell=True)
 
 def clear_wrenches():
-    subprocess.check_call("rosservice call /gazebo/clear_body_wrenches \"body_name: 'ridgeback'\"", shell=True)
+    subprocess.check_call("rosservice call /gazebo/clear_body_wrenches \"body_name: 'ur3'\"", shell=True)
 
 def reset_world():
     subprocess.check_call("rosservice call /gazebo/reset_world", shell=True)

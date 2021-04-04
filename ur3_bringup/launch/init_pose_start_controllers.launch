@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <launch>
   <rosparam file="$(find ur3_bringup)/launch/config/initial_pose.yaml" command="load"/>
 

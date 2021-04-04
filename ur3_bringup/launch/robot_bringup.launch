@@ -6,38 +6,50 @@
   <arg name="headless" default="false" />
   <arg name="world_name" default="$(find ur3_bringup)/worlds/empty.world" />
 
-  <!-- UR5 arm parameters (real robot) -->
+  <!-- UR3 arm parameters (real robot) -->
+  <arg name="robot_ip"  default="192.168.56.1"/>
   <arg name="min_payload"  default="1.0"/>
   <arg name="max_payload"  default="3.0"/>
   <arg name="max_velocity" default="10.0"/>
+  <arg name="servoj_time" default="2000" />
   <arg name="prefix" default="ur3_arm_" />
   <arg name="base_frame" default="$(arg prefix)base" />
   <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
 
+
+  <!-- FULL ROBOT DESCRIPTION -->
+  <include file="$(find ur3_description)/launch/description.launch"/>
+
   <!-- REAL ROBOT -->
   <group unless="$(arg sim)">
+
+    <!-- URDF update for FT -->
+    <node pkg="tf" type="static_transform_publisher" name="FT300_static" 
+      args="0.0 0.0 0.0 -1.57 0.0 0.0 FT300_link robotiq_ft_frame_id 5" />
+
     <!-- FT sensor -->
-    <node name="ft_sensor" pkg="robotiq_force_torque_sensor" 
+    <node name="ft_sensor" pkg="robotiq_ft_sensor" 
       type="rq_sensor" respawn="true" output="screen" >
-      <remap from="/robotiq_force_torque_wrench" to="/admittance_control/wrench"/>
+      <remap from="/robotiq_ft_wrench" to="/admittance_control/wrench"/>
     </node>
 
     <!-- Bias the F/T sensor at startup -->
     <node pkg="rosservice" type="rosservice" name="ft_sensor_biaser" 
-      args="call --wait /robotiq_force_torque_sensor_acc &quot;command: 'SET_ZRO'&quot; " />
+      args="call --wait /robotiq_ft_sensor_acc &quot;command: 'SET_ZRO'&quot; " >
+    </node>
 
     <!-- UR3 ARM -->
     <group ns="ur3">
-        <!-- Hardware interface for rso control-->
+        <!-- Hardware interface for ros control-->
         <node name="ur_hardware_interface" pkg="ur_modern_driver" type="ur_driver"
             output="screen" >
-          <param name="robot_ip_address" type="str" value="192.168.56.1"/>
+          <param name="robot_ip_address" type="str" value="$(arg robot_ip)"/>
           <param name="min_payload" type="double" value="$(arg min_payload)"/>
           <param name="max_payload" type="double" value="$(arg max_payload)"/>
           <param name="max_velocity" type="double" value="$(arg max_velocity)"/>
           <param name="use_ros_control" type="bool" value="True"/>
-          <param name="servoj_gain" type="double" value="2000" />
-          <param name="prefix" value="$(arg prefix)" />
+          <param name="servoj_gain" type="double" value="$(arg servoj_time)" />
+          <param name="prefix" type="str" value="$(arg prefix)" />
           <param name="base_frame" type="str" value="$(arg base_frame)"/>
           <param name="tool_frame" type="str" value="$(arg tool_frame)"/>
         </node>
@@ -75,10 +87,6 @@
       <arg name="world_name" value="$(arg world_name)" />
     </include>
 
-    <!-- FULL ROBOT DESCRIPTION -->
-    <!-- For the real robot it launches at startup so we don't need to load it again --> 
-    <include file="$(find ur3_description)/launch/description.launch">
-    </include>
 
    <!-- Fake Calibration for the UR3 arm -->
     <node pkg="rostopic" type="rostopic" name="fake_joint_calibration"
@@ -92,7 +100,7 @@
 
     <!-- FAKE FT sensor -->
     <node pkg="tf" type="static_transform_publisher" name="FT300_static"
-      args="0.0 0.0 0.0 0.0 0.0 0.0 FT300_link robotiq_force_torque_frame_id 1" />
+      args="0.0 0.0 0.0 0.0 0.0 0.0 FT300_link robotiq_ft_frame_id 1" />
 
     <!-- UR3 ARM CONTROLLERS -->
     <!-- joint_state_controller (to publish states, an observer) -->

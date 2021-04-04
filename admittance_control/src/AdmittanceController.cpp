@@ -292,7 +292,7 @@ void AdmittanceController::wrench_callback(
 
     // Get transform from arm base link to platform base link
     get_rotation_matrix(rotation_ft_base, listener_ft_,
-                        "ur3_arm_base_link", "robotiq_force_torque_frame_id");
+                        "ur3_arm_base_link", "robotiq_ft_frame_id");
 
     // Filter and update
     wrench_external_ <<  (1 - wrench_filter_factor_) * wrench_external_ +
@@ -580,8 +580,7 @@ void AdmittanceController::publish_arm_state_in_world() {
 
   if (arm_world_ready_ && base_world_ready_) {
     try {
-      // listener.lookupTransform("ur5_arm_base_link", "robotiq_force_torque_frame_id",
-      listener_arm_.lookupTransform("world", "robotiq_force_torque_frame_id",
+      listener_arm_.lookupTransform("world", "robotiq_ft_frame_id",
                                     ros::Time(0), transform);
 
       // transform.getRotation().getW();

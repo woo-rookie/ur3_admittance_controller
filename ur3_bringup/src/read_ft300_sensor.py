@@ -29,12 +29,15 @@ class socket_connection ():
 
         try:
 
-            config = ConfigParser.ConfigParser()
-            config.read("config.ini")
+            #config = ConfigParser.ConfigParser()
+            #config.read("config.ini")
 
-            self.host_ip = config.get('Information', 'ip_address_ur3')
-            self.port = int (config.get ('Information', 'port'))
-            self.output_file_location = config.get ('Information', 'output_file_location') 
+            #self.host_ip = config.get('Information', 'ip_address_ur3')
+            #self.port = int (config.get ('Information', 'port'))
+            #self.output_file_location = config.get ('Information', 'output_file_location')
+            self.host_ip = "192.168.56.1"
+            self.port = 63351
+            self.output_file_location = "/home/wx/catkin_ws/src/ur3_admittance_controller/ur3_bringup/src"
             
             self.write_object = True
 
@@ -84,8 +87,8 @@ class socket_connection ():
                     denemeMz = float(deneme.split(',')[5].split(')')[0])
                     ForceData = [denemeFx, denemeFy, denemeFz]
                     TorqueData = [denemeMx, denemeMy, denemeMz]
-                    rospy.loginfo(ForceData)
-                    rospy.loginfo(TorqueData)
+                    #rospy.loginfo(ForceData)
+                    #rospy.loginfo(TorqueData)
                     wrench = make_wrench_stamped(ForceData, TorqueData)
                     self.publisher_object.publish(wrench)
                     self.publisher_rate.sleep()

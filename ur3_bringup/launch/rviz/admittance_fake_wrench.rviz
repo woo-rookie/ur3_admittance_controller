@@ -170,7 +170,7 @@ Visualization Manager:
           Value: true
         mid_mount:
           Value: false
-        robotiq_force_torque_frame_id:
+        robotiq_ft_frame_id:
           Value: true
         ur3_arm_base:
           Value: false
@@ -214,7 +214,7 @@ Visualization Manager:
                           ur3_arm_wrist_3_link:
                             ur3_arm_ee_link:
                               FT300_link:
-                                robotiq_force_torque_frame_id:
+                                robotiq_ft_frame_id:
                                   {}
                             ur3_arm_tool0:
                               {}

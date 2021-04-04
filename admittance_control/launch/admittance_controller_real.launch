@@ -5,8 +5,8 @@
   <!-- TOPICS FROM THE LOWER-LEVE CONTROLLER -->
 
   <!-- Communication with the arm, reading the state of the arm and commanding velocities -->
-  <arg name="TOPIC_ARM_STATE"   default="/ur3/ur3_cartesian_velocity_controller_sim/ee_state"         />
-  <arg name="TOPIC_ARM_COMMAND" default="/ur3/ur3_cartesian_velocity_controller_sim/command_cart_vel" />
+  <arg name="TOPIC_ARM_STATE"   default="/ur3/ur3_cartesian_velocity_controller/ee_state"         />
+  <arg name="TOPIC_ARM_COMMAND" default="/ur3/ur3_cartesian_velocity_controller/command_cart_vel" />
 
   <!-- TOPICS AND SETTINGS FOR ADMITTANCE CONTROLLER -->
 

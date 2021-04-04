@@ -13,9 +13,12 @@
   </include>
 
   <!-- RVIZ -->
-  <group if="$(arg sim)" >
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_conf)"/>
-  </group>
+
+  <!-- REAL WRENCH from ft300 -->
+  <!--node unless="$(arg sim)" name="read_ft300_sensor" pkg="ur3_bringup" type="read_ft300_sensor.py"
+    required="true" output="screen">
+  </node-->
 
   <group if="$(arg sim)">
     <!-- FAKE WRENCH (if there is no ft300 device)-->
@@ -24,19 +27,13 @@
       <remap from="wrench" to="admittance_control/wrench" />
     </node>
 
-    <!-- REAL WRENCH from falcon -->
-    <node unless="$(arg sim)" name="read_ft300_sensor" pkg="ur3_bringup" type="read_ft300_sensor.py"
-      required="true" output="screen">
-    </node>
-
     <!-- SET INITIAL POSE AND START CONTROLLERS-->
     <!-- To make sure gazebo is already loaded, they are launched 6 secs
          after the initial roslaunch -->
     <node pkg="ur3_bringup" type="timed_roslaunch.sh"
       args="6 ur3_bringup init_pose_start_controllers.launch"
       name="timed_start_controllers" output="screen">
-  </node>
-
+    </node>
   </group>
 
 </launch>
