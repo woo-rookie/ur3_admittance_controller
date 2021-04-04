@@ -46,7 +46,7 @@ git commit -m "$(date)"
 # git commit -m "first commit"
 
 # git pull gitee master
-git pull github master
+git pull github main
 
 # git branch main
 # git checkout main 
