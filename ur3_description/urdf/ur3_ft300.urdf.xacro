@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <robot name="ur3" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:property name="PI" value="3.1415926535897931" />
-
-  <xacro:property name="connector_height" value="0.020" />
+  <xacro:property name="connector_height" value="0.0" />
 
   <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
   <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>

@@ -5,8 +5,6 @@
 
 #include "cartesian_state_msgs/PoseTwist.h"
 #include "geometry_msgs/WrenchStamped.h"
-#include "geometry_msgs/TwistStamped.h"
-#include "sensor_msgs/LaserScan.h"
 #include <tf/transform_datatypes.h>
 #include <tf_conversions/tf_eigen.h>
 #include <tf/transform_listener.h>

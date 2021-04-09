@@ -222,7 +222,7 @@ void AdmittanceController::compute_admittance() {
                              + admittance_ratio_ * wrench_external_ + wrench_control_);
 
   // limiting the accelaration for better stability and safety
-  // x and y for  platform and x,y,z for the arm
+  // x,y,z for the arm
 
   double a_acc_norm = (arm_desired_accelaration.segment(0, 3)).norm();
 
@@ -265,11 +265,11 @@ void AdmittanceController::wrench_callback(
   Matrix6d rotation_ft_base;
   if (ft_arm_ready_) {
 
-    // Reading the FT-sensor in its own frame (robotiq_force_torque_frame_id)
+    // Reading the FT-sensor in its own frame (robotiq_ft_frame_id)
     wrench_ft_frame << msg->wrench.force.x, msg->wrench.force.y,
                     msg->wrench.force.z, msg->wrench.torque.x,
                     msg->wrench.torque.y, msg->wrench.torque.z;
-
+    // ROS_INFO_STREAM_THROTTLE(1,"Reading the FT-sensor in its own frame (robotiq_ft_frame_id):" << wrench_ft_frame);
     // Dead zone for the FT sensor
     // if (wrench_ft_frame.topRows(3).norm() < force_dead_zone_thres_) {
     //   wrench_ft_frame.topRows(3).setZero();
@@ -315,7 +315,7 @@ void AdmittanceController::wrench_control_callback(
 void AdmittanceController::ds_velocity_callback(const geometry_msgs::TwistStampedPtr msg) {
 
   arm_desired_twist_ds_ << msg->twist.linear.x , msg->twist.linear.y , msg->twist.linear.z ;
-  // ROS_INFO_STREAM_THROTTLE(1,"received velocity, z:" << arm_desired_twist_ds_(2));
+  //ROS_INFO_STREAM_THROTTLE(1,"received velocity, z:" << arm_desired_twist_ds_(2));
 
 }
 void AdmittanceController::equilibrium_callback(const geometry_msgs::PointPtr msg) {
@@ -406,9 +406,9 @@ void AdmittanceController::send_commands_to_robot() {
   arm_twist_cmd.angular.y = arm_desired_twist_final_(4);
   arm_twist_cmd.angular.z = arm_desired_twist_final_(5);
 
-  // ROS_WARN_STREAM_THROTTLE(1,"sending z vel: " << arm_twist_cmd.linear.z);
-
   pub_arm_cmd_.publish(arm_twist_cmd);
+
+  // ROS_WARN_STREAM_THROTTLE(1,"sending vel: " << arm_twist_cmd);
 }
 
 
@@ -506,7 +506,7 @@ void AdmittanceController::wait_for_transformations() {
   world_arm_ready_ = true;
 
   while (!get_rotation_matrix(rot_matrix, listener,
-                              "ur3_arm_base_link", "FT300_link")) {
+                              "ur3_arm_base_link", "ft300_sensor")) {
     sleep(1);
   }
 
@@ -571,7 +571,7 @@ void AdmittanceController::publish_arm_state_in_world() {
   msg_twist.twist.angular.y = ee_twist_world_(4);
   msg_twist.twist.angular.z = ee_twist_world_(5);
   pub_ee_twist_world_.publish(msg_twist);
-
+  // ROS_INFO_STREAM_THROTTLE(1,"pub_ee_twist_world_:" << msg_twist);
 
   // publishing the cartesian position of the EE in the world-frame
 
@@ -611,7 +611,7 @@ void AdmittanceController::publish_arm_state_in_world() {
   msg_pose.pose.orientation.z = ee_pose_world_(5);
   msg_pose.pose.orientation.w = ee_pose_world_(6);
   pub_ee_pose_world_.publish(msg_pose);
-
+  //ROS_INFO_STREAM_THROTTLE(1,"pub_ee_pose_world_:" << msg_pose);
 }
 
 
@@ -629,6 +629,7 @@ void AdmittanceController::publish_debuggings_signals() {
   msg_wrench.wrench.torque.y = wrench_external_(4);
   msg_wrench.wrench.torque.z = wrench_external_(5);
   pub_wrench_external_.publish(msg_wrench);
+  // ROS_INFO_STREAM_THROTTLE(1,"pub_wrench_external_:" << msg_wrench);
 
   msg_wrench.header.stamp    = ros::Time::now();
   msg_wrench.header.frame_id = "ur3_arm_base_link";
@@ -639,7 +640,7 @@ void AdmittanceController::publish_debuggings_signals() {
   msg_wrench.wrench.torque.y = wrench_control_(4);
   msg_wrench.wrench.torque.z = wrench_control_(5);
   pub_wrench_control_.publish(msg_wrench);
-
+  // ROS_INFO_STREAM_THROTTLE(1,"pub_wrench_control_:" << msg_wrench);
 
   geometry_msgs::PointStamped msg_point;
 
@@ -649,6 +650,6 @@ void AdmittanceController::publish_debuggings_signals() {
   msg_point.point.y          = equilibrium_position_(1);
   msg_point.point.z          = equilibrium_position_(2);
   pub_equilibrium_real_.publish(msg_point);
-
+  // ROS_INFO_STREAM_THROTTLE(1,"pub_equilibrium_real_:" << msg_point);
 }
 

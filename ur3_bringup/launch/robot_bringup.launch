@@ -8,10 +8,10 @@
 
   <!-- UR3 arm parameters (real robot) -->
   <arg name="robot_ip"  default="192.168.56.1"/>
-  <arg name="min_payload"  default="1.0"/>
+  <arg name="min_payload"  default="0.0"/>
   <arg name="max_payload"  default="3.0"/>
   <arg name="max_velocity" default="10.0"/>
-  <arg name="servoj_time" default="2000" />
+  <arg name="servoj_time" default="750" />
   <arg name="prefix" default="ur3_arm_" />
   <arg name="base_frame" default="$(arg prefix)base" />
   <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
@@ -20,23 +20,35 @@
   <!-- FULL ROBOT DESCRIPTION -->
   <include file="$(find ur3_description)/launch/description.launch"/>
 
+
   <!-- REAL ROBOT -->
   <group unless="$(arg sim)">
 
     <!-- URDF update for FT -->
-    <node pkg="tf" type="static_transform_publisher" name="FT300_static" 
-      args="0.0 0.0 0.0 -1.57 0.0 0.0 FT300_link robotiq_ft_frame_id 5" />
-
-    <!-- FT sensor -->
-    <node name="ft_sensor" pkg="robotiq_ft_sensor" 
-      type="rq_sensor" respawn="true" output="screen" >
+    <node pkg="tf" type="static_transform_publisher" name="ft300_static" 
+      args="0.0 0.0 0.0 -1.57 0.0 0.0 ft300_sensor robotiq_ft_frame_id 5" />
+    <!-- REAL WRENCH from ft300 -->
+    <node name="read_ft300_sensor" pkg="ur3_bringup" 
+      type="read_ft300_sensor.py" required="true" output="screen">
       <remap from="/robotiq_ft_wrench" to="/admittance_control/wrench"/>
     </node>
 
+    <!-- FT sensor -->
+    <!--node name="ft_sensor" pkg="robotiq_ft_sensor" 
+      type="rq_sensor" respawn="true" output="screen" >
+      <remap from="/robotiq_ft_wrench" to="/admittance_control/wrench"/>
+    </node-->
+
     <!-- Bias the F/T sensor at startup -->
-    <node pkg="rosservice" type="rosservice" name="ft_sensor_biaser" 
-      args="call --wait /robotiq_ft_sensor_acc &quot;command: 'SET_ZRO'&quot; " >
-    </node>
+    <!-- command_id
+         COMMAND_GET_SERIAL_NUMBER=1
+         COMMAND_GET_FIRMWARE_VERSION=2
+         COMMAND_GET_PRODUCTION_YEAR=4
+         COMMAND_SET_ZERO=8 -->
+
+    <!--node pkg="rosservice" type="rosservice" name="ft_sensor_biaser" 
+      args="call -wait /robotiq_ft_sensor_acc &quot;command_id: 8&quot; " >
+    </node-->
 
     <!-- UR3 ARM -->
     <group ns="ur3">
@@ -49,14 +61,9 @@
           <param name="max_velocity" type="double" value="$(arg max_velocity)"/>
           <param name="use_ros_control" type="bool" value="True"/>
           <param name="servoj_gain" type="double" value="$(arg servoj_time)" />
-          <param name="prefix" type="str" value="$(arg prefix)" />
+          <param name="prefix" value="$(arg prefix)" />
           <param name="base_frame" type="str" value="$(arg base_frame)"/>
           <param name="tool_frame" type="str" value="$(arg tool_frame)"/>
-        </node>
-
-        <!-- Convert joint states to /tf tranforms -->
-        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-          <rosparam param="publish_frequency">200</rosparam>
         </node>
 
         <!-- ROS control controllers -->
@@ -65,14 +72,17 @@
         <node name="joint_state_controller_spawner" pkg="controller_manager"
           type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
 
-        <!-- arm controller (to send commands to the arm) Uses the simulated velocity control
-          interface to gazebo -->
+        <!-- arm controller (to send commands to the arm) -->
         <rosparam file="$(find ur3_bringup)/controllers/ur3_vel_controller.yaml" command="load"/>
         <node name="arm_controller_spawner" pkg="controller_manager"
             type="controller_manager" args="spawn ur3_cartesian_velocity_controller"
             respawn="false" output="screen"/>
-    </group>
 
+        <!-- Convert joint states to /tf tranforms -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+          <!--rosparam param="publish_frequency">200</rosparam-->
+        </node>
+    </group>
   </group>
 
   <!-- SIMULATOR -->
@@ -99,20 +109,20 @@
         args="-urdf -model ur3 -param robot_description -x 0.0 -y 0.0 -z 0.0" />
 
     <!-- FAKE FT sensor -->
-    <node pkg="tf" type="static_transform_publisher" name="FT300_static"
-      args="0.0 0.0 0.0 0.0 0.0 0.0 FT300_link robotiq_ft_frame_id 1" />
+    <node pkg="tf" type="static_transform_publisher" name="ft300_static"
+      args="0.0 0.0 0.0 0.0 0.0 0.0 ft300_sensor robotiq_ft_frame_id 1" />
 
     <!-- UR3 ARM CONTROLLERS -->
     <!-- joint_state_controller (to publish states, an observer) -->
     <rosparam file="$(find ur3_bringup)/controllers/joint_state_controller.yaml" command="load"/>
     <node name="joint_state_controller_spawner" pkg="controller_manager"
-      type="controller_manager" args="load joint_state_controller" respawn="false" output="screen"/>
+      type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
 
     <!-- arm controller (to send commands to the arm) Uses the simulated velocity control
       interface to gazebo -->
     <rosparam file="$(find ur3_bringup)/controllers/ur3_vel_controller.yaml" command="load"/>
     <node name="arm_controller_spawner" pkg="controller_manager"
-      type="controller_manager" args="load ur3_cartesian_velocity_controller_sim"
+      type="controller_manager" args="spawn ur3_cartesian_velocity_controller_sim"
       respawn="false" output="screen"/>
   </group>
   

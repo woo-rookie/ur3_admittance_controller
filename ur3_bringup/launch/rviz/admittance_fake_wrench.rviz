@@ -62,17 +62,26 @@ Visualization Manager:
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        FT300_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: true
-          Value: true
         Link Tree Style: Links in Alphabetic Order
         base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        ft300_mounting_plate:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ft300_sensor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         mid_mount:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        robotiq_ft_frame_id:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -162,12 +171,14 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        FT300_link:
-          Value: false
         base_link:
-          Value: true
+          Value: false
         fake_force_pose:
           Value: true
+        ft300_mounting_plate:
+          Value: false
+        ft300_sensor:
+          Value: false
         mid_mount:
           Value: false
         robotiq_ft_frame_id:
@@ -175,7 +186,7 @@ Visualization Manager:
         ur3_arm_base:
           Value: false
         ur3_arm_base_link:
-          Value: true
+          Value: false
         ur3_arm_ee_link:
           Value: false
         ur3_arm_forearm_link:
@@ -213,9 +224,10 @@ Visualization Manager:
                         ur3_arm_wrist_2_link:
                           ur3_arm_wrist_3_link:
                             ur3_arm_ee_link:
-                              FT300_link:
-                                robotiq_ft_frame_id:
-                                  {}
+                              ft300_mounting_plate:
+                                ft300_sensor:
+                                  robotiq_ft_frame_id:
+                                    {}
                             ur3_arm_tool0:
                               {}
           fake_force_pose:
@@ -292,25 +304,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.092255115509033
+      Distance: 1.687724232673645
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.646758496761322
-        Y: 0.22403836250305176
+        X: 0.6184986233711243
+        Y: 0.10883486270904541
         Z: 7.152557373046875e-7
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.17479686439037323
+      Pitch: 0.5447966456413269
       Target Frame: ur5_arm_base
       Value: XYOrbit (rviz)
-      Yaw: 0.051303740590810776
+      Yaw: 0.041311778128147125
     Saved: ~
 Window Geometry:
   Displays:

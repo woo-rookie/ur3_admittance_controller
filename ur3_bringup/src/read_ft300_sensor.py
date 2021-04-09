@@ -117,7 +117,7 @@ class socket_connection ():
 
 def main():
     
-    pub = rospy.Publisher('/admittance_control/wrench', WrenchStamped, queue_size=10)
+    pub = rospy.Publisher('/robotiq_ft_wrench', WrenchStamped, queue_size=10)
     rospy.init_node('torque_force_sensor_data', anonymous=True)
         
     rate = rospy.Rate(10) 
