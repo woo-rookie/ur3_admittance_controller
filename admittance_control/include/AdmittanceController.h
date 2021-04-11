@@ -122,7 +122,7 @@ protected:
   // INPUT SIGNAL
   // external wrench (force/torque sensor) in "robotiq_force_torque_frame_id" frame
   Vector6d wrench_external_;
-  // control wrench (from any controller) expected to be in "ur5_arm_base_link" frame
+  // control wrench (from any controller) expected to be in "ur3_arm_base_link" frame
   Vector6d wrench_control_;
 
 
