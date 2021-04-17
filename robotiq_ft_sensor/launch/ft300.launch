@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="pkg_name" default="robotiq_ft_sensor" />
+
+  <node pkg="$(arg pkg_name)" type="rq_sensor" name="rq_sensor" output="screen" />
+</launch>

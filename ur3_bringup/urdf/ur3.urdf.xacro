@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="ur3" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find ur3_bringup)/urdf/ur3_description.urdf.xacro" />
+
+  <!-- Spawn arm -->
+  <xacro:ur3_robot prefix="" joint_limited="false" />
+  <xacro:ur3_gazebo prefix="" />
+  <xacro:ur3_transmission prefix="" hw_interface="hardware_interface/PositionJointInterface"/>
+
+</robot>
