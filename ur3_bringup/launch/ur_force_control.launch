@@ -10,8 +10,11 @@ doc="Port that will be opened by the driver to allow direct communication betwee
 doc="The driver will offer an interface to receive the program's URScript on this port. If the robot cannot connect to this port, `External Control` will stop immediately."/>
   <arg name="tf_prefix" default="" 
 doc="tf_prefix used for the robot."/>
-  <arg name="controller_config_file" default="$(find ur_robot_driver)/config/ur3_controllers.yaml" 
+  <arg name="controller_config_file" default="$(find ur3_bringup)/controllers/ur3_cart_vel_controller.yaml" 
 doc="Config file used for defining the ROS-Control controllers."/>
+
+  <arg name="controllers" default="joint_state_controller ur3_cartesian_velocity_controller"/>
+
   <arg name="robot_description_file" default="$(find ur_description)/launch/ur3_upload.launch" 
 doc="Robot description launch file."/>
   <arg name="kinematics_config" default="$(find ur_description)/config/ur3_default.yaml" doc="Kinematics config file used for calibration correction. This will be used to verify the robot's calibration is matching the robot_description."/>
@@ -87,10 +90,10 @@ doc="Recipe file used for the RTDE-inputs. Only change this if you know what you
 
   <!-- Load controller settings -->
   <rosparam file="$(arg controller_config_file)" command="load"/>
-    
-  <!-- 自己加载的 -->
-  <node name="admittance_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" 
-    output="screen" args="load ur3_cartesian_velocity_controller" />
+
+  <!-- spawn controller manager -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="$(arg controllers)" />
 
   <!-- Make sure to start this in the namespace of the hardware interface -->
   <node ns="ur_hardware_interface" name="ur_robot_state_helper" pkg="ur_robot_driver" type="robot_state_helper" respawn="false" output="screen">
