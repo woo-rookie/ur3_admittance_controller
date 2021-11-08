@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<launch>
+  <arg name="sim" default="false" />
+  <arg name="use_sim_time" default="true" />
+  <arg name="F/T_sensor" default="true"/>
+  <arg name="paused" default="true" />
+  <arg name="headless" default="false" />
+  <arg name="world_name" default="$(find ur3_bringup)/worlds/empty.world" />
+
+  <!-- **************************REAL ROBOT***************************** -->
+  <group unless="$(arg sim)">
+
+    <node pkg="tf" type="static_transform_publisher" name="link2_broadcaster" 
+      args="0 0 0 0 0 0 1 ee_link FT_link 7" />
+
+    <!-- F/T sensor -->
+    <!-- ********REAL WRENCH from F/T sensor********************** -->
+    <!--include if="$(arg F/T_sensor)" file="$(find ur3_bringup)/launch/ft_sensor.launch"/-->
+    <!-- ********REAL WRENCH from F/T sensor********************** -->
+ 
+    <include file="$(find ur3_bringup)/launch/ur_force_control.launch">
+      <arg name="robot_ip" value="192.168.56.2" />
+    </include>
+
+
+    <!-- ROS control controllers -->
+    <!-- joint_state_controller (to publish states, an observer) -->
+    
+
+
+    <!-- arm controller (to send commands to the arm) Uses the simulated velocity control
+      interface to gazebo -->
+    
+
+  </group>
+  <!-- **************************REAL ROBOT***************************** -->
+
+
+  <!--************************** SIMULATOR ******************************-->
+  <group if="$(arg sim)">
+    <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" 
+      args="0 0 0 0 0 0 1 world base_link 7" />
+
+    <!-- Launch Gazebo with the specified world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="paused" value="$(arg paused)" />
+      <arg name="debug" value="0" />
+      <arg name="gui" value="false" />
+      <arg name="use_sim_time" value="$(arg use_sim_time)" />
+      <arg name="headless" value="$(arg headless)" />
+      <arg name="world_name" value="$(arg world_name)" />
+    </include>
+
+    <!-- FULL ROBOT DESCRIPTION -->
+    <!-- For the real robot it launches at startup so we don't need to load it again --> 
+    <param name="robot_description" command="$(find xacro)/xacro '$(find ur3_bringup)/urdf/ur3.urdf.xacro'" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+
+   <!-- Fake Calibration for the UR3 arm -->
+    <node pkg="rostopic" type="rostopic" name="fake_joint_calibration"
+        args="pub /calibrated std_msgs/Bool true" />
+
+    <!-- SPAWN FULL ROBOT -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -model ur3 -param robot_description -x 0 -y 0 -z 0" />
+
+    <!-- UR5 ARM CONTROLLERS -->
+    <!-- joint_state_controller (to publish states, an observer) -->
+    <rosparam file="$(find ur3_bringup)/controllers/joint_state_controller.yaml" command="load"/>
+    <node name="joint_state_controller_spawner" pkg="controller_manager"
+      type="controller_manager" args="load joint_state_controller" respawn="false" output="screen"/>
+
+    <!-- arm controller (to send commands to the arm) Uses the simulated velocity control
+      interface to gazebo -->
+    <rosparam file="$(find ur3_bringup)/controllers/ur3_vel_controller.yaml" command="load"/>
+    <node name="arm_controller_spawner" pkg="controller_manager"
+      type="controller_manager" args="load ur3_cartesian_velocity_controller_sim"
+      respawn="false" output="screen"/>
+  </group>
+  <!--************************** SIMULATOR ******************************-->
+  
+</launch>
+

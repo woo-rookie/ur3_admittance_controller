@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <!--node pkg="rqt_plot" name="rqt_plot_force" type="rqt_plot" args="/robotiq_ft_sensor/Fx:Fy:Fz">
+  </node>
+
+  <node pkg="rqt_plot" name="rqt_plot_torque" type="rqt_plot" args="/robotiq_ft_sensor/Mx:My:Mz">
+  </node-->
+
+  <node pkg="rqt_plot" name="rqt_plot_force" type="rqt_plot" args="/robotiq_ft_wrench/wrench/force/x:y:z">
+  </node>
+  <node pkg="rqt_plot" name="rqt_plot_torque" type="rqt_plot" args="/robotiq_ft_wrench/wrench/torque/x:y:z">
+  </node>
+</launch>

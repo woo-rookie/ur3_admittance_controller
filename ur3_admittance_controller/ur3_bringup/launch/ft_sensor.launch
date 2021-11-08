@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<launch>
+  <arg name="frame" default="/FT_link"/>
+  <node pkg="ur3_bringup" name="ft_sensor" type="rq_ft300.py" output="screen">
+  </node>
+
+  <!-- FT sensor -->
+  <!--node name="ft_sensor" pkg="robotiq_ft_sensor" type="rq_sensor" respawn="true" output="screen" >
+    <param name="~frame_id" value="$(arg frame)" />
+  </node-->
+
+  <!-- Bias the F/T sensor at startup -->
+  <!-- command_id
+       COMMAND_GET_SERIAL_NUMBER=1
+       COMMAND_GET_FIRMWARE_VERSION=2
+       COMMAND_GET_PRODUCTION_YEAR=4
+       COMMAND_SET_ZERO=8 -->
+
+  <!--node pkg="rosservice" type="rosservice" name="ft_sensor_biaser"  args="call -wait /robotiq_ft_sensor_acc &quot;command_id: 8&quot; " /-->
+
+  <node pkg="ur3_bringup" type="timed_roslaunch.sh" args="6 ur3_bringup ft_plot.launch"  
+    name="timed_delay_controllers" output="screen">
+  </node>
+
+
+</launch>
